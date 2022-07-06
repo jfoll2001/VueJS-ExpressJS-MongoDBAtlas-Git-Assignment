@@ -1,9 +1,15 @@
-<script setup>
-import TheWelcome from '@/components/TheWelcome.vue'
+<script>
+import Login from "@/components/Login.vue"
+
+export default {
+  components: {
+    Login
+  }
+}
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <Login>
+
+  </Login>
 </template>
