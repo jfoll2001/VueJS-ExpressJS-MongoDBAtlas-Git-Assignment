@@ -11,7 +11,7 @@
                     <div class="mt-4 mb-4">
                         <RouterLink to="/patients" class="btn btn-secondary">Manage Patients</RouterLink>
                     </div>
-                    <RouterLink to="/appointmets" class="btn btn-secondary">Manage Appointments</RouterLink>
+                    <RouterLink to="/appointments" class="btn btn-secondary">Manage Appointments</RouterLink>
                     <div class="mt-4">
                         <RouterLink to="/" class="btn btn-danger">Log Out</RouterLink>
                     </div>
