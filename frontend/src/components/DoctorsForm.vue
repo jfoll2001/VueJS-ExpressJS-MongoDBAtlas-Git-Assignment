@@ -13,7 +13,7 @@
                     <input type="text" class="form-control" placeholder="Last Name" required>
                 </div>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon3">Phone:</span>
+                    <span class="input-group-text">Phone:</span>
                     <input type="text" class="form-control" placeholder="xxx-xxx-xxxx" required>
                     <span class="input-group-text">Specialty:</span>
                     <input type="text" class="form-control" placeholder="Specialty" required>
