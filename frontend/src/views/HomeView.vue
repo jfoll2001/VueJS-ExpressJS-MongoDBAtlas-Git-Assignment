@@ -34,12 +34,8 @@ export default {
         .then(response => response)
     },
     testUserHandler(user) {
-      console.log(user)
-      if (this.users.name != user.name && this.users.password != user.password) {
-        console.log('not admin')
-      } else {
-        console.log('Wrong')
-      }
+      console.log(this.users)
+      
     }
   },
   mounted() {

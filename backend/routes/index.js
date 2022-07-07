@@ -30,8 +30,7 @@ router.get('/testCollections', async (req, res) => {
 router.get('/loginUsers', async (req, res) => {
     await client.db().collection('users').find().toArray((err, result) => {
         if (err) throw err;
-        res.send(JSON.stringify(result));
-        console.log(result)
+        res.send(JSON.stringify(result));      
         res.end();
     });
 });
