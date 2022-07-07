@@ -1,6 +1,5 @@
 <script>
 export default {
-    name: 'DoctorsForm',
     data() {
         return {
             doctor: {

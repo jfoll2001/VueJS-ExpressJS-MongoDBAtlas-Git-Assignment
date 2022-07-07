@@ -1,6 +1,5 @@
 <script>
 export default {
-    name: 'DoctorsSearch',
     data() {
         return {
             searchParam: ''

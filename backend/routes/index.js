@@ -139,4 +139,62 @@ router.get('/searchUser/:param', async (req, res) => {
     });
 });
 
+//Loads patients
+router.get('/loadPatients', async (req, res) => {
+    await client.db().collection('patients').find().toArray((err, result) => {
+        if (err) throw err;
+        res.send(JSON.stringify(result));
+        res.end();
+    });
+});
+
+//Adds patient
+router.post('/savePatient', async (req, res) => {
+    let form = req.body;
+    await client.db().collection('patients').insertOne(form, (err, result) => {
+        if (err) throw err;
+        res.end();
+    });
+});
+
+//Updates patient
+router.put('/updatePatient/:updateid', async (req, res) => {
+    let updateid = req.params.updateid;
+    let form = req.body;
+    let query = { _id: new mongodb.ObjectId(updateid) };
+    let newValues = { $set: form };
+    await client.db().collection('patients').updateOne(query, newValues, (err, result) => {
+        if (err) throw err;
+        res.end();
+    });
+});
+
+//Deletes patient
+router.delete('/deletePatient/:id', async (req, res) => {
+    let id = req.params.id;
+    let query = { _id: new mongodb.ObjectId(id) };
+    await client.db().collection('patients').deleteOne(query, (err, result) => {
+        if (err) throw err;
+        res.end();
+    });
+});
+
+//Searches patients
+router.get('/searchPatient/:param', async (req, res) => {
+    let param = req.params.param;
+    let query = {
+        $or: [
+            { fname: new RegExp(param, 'i') },
+            { lname: new RegExp(param, 'i') },
+            { dateofbirth: new RegExp(param, 'i') },
+            { sex: new RegExp(param, 'i') }
+        ]
+    };
+    await client.db().collection('patients').find(query).toArray((err, result) => {
+        if (err) throw err;
+        res.send(JSON.stringify(result));
+        res.end();
+    });
+});
+
 module.exports = router;

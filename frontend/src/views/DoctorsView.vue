@@ -21,11 +21,6 @@ export default {
                 phone: '',
                 specialty: ''
             },
-            // formUser: {
-            //     name: '',
-            //     admin: 'no',
-            //     password: ''
-            // },           
             editModal: null,
             toUpdate: 0
         }
