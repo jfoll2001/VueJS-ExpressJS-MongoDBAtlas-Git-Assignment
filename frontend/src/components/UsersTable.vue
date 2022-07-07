@@ -1,5 +1,7 @@
 <script>
-
+export default {
+    props: ['users']
+}
 </script>
 
 <template>
@@ -15,12 +17,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>{{}}</td>
-                    <td>{{}}</td>
-                    <td>{{}}</td>
+                <tr v-for="(user, i) in users" :key="i">
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.admin }}</td>
+                    <td>{{ user.password }}</td>
                     <td>
-                        <button class="btn btn-warning px-4">Edit</button>
+                        <button @click="$emit('editUser', user._id, i)" class="btn btn-warning px-4 me-4">Edit</button>
+                        <button @click="$emit('deleteUser', user._id, i)" class="btn btn-danger ms-4">Delete</button>
                     </td>
                 </tr>
             </tbody>

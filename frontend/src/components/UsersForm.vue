@@ -1,32 +1,56 @@
 <script>
-
+export default {
+    name: 'UsersForm',
+    data() {
+        return {
+            user: {
+                name: '',
+                admin: 'false',
+                password: ''
+            },
+            passwordVal: ''
+        }
+    },
+    methods: {
+        saveUser() {
+            console.log(this.user)
+            if (!this.user.name || !this.user.password) {
+                alert("All fields need to filled out");
+                return;
+            } else if (this.user.password != this.passwordVal) {
+                alert("Passwords need to match");
+                return;
+            }
+            this.$emit('saveUser', this.user);
+        }
+    }
+}
 </script>
 
 
 <template>
     <div>
-        <button class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Admin</button>
-
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Admin Form</h5>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <p class="mb-1">Admin Name</p>
-                            <input type="text" class="form-control mb-3" placeholder="Admin Name" required>
-                            <p class="mb-1">Password</p>
-                            <input type="password" class="form-control mb-3" placeholder="Password" required>
-                            <p class="mb-1">Re-enter Password</p>
-                            <input type="password" class="form-control mb-3" placeholder="Re-enter Password" required>
-                            <button class="btn btn-primary mb-3 px-3">Save changes</button>
-                        </form>
-                        <button type="button" class="btn btn-danger px-5" data-bs-dismiss="modal">Close</button>
-                    </div>
+        <div class="mt-4">
+            <form class="w-25 mx-auto">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Username:</span>
+                    <input v-model="user.name" type="text" class="form-control" placeholder="Username" required>
                 </div>
-            </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Password:</span>
+                    <input v-model="user.password" type="password" class="form-control" placeholder="Password" required>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Confirm Password:</span>
+                    <input v-model="passwordVal" type="password" class="form-control" placeholder="Confirm Password"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <input v-model="user.admin" type="checkbox" class="form-check-input">
+                    <label class="form-check-label">&nbsp; Admin?</label>
+                </div>
+                <button @click="saveUser" class="btn btn-primary mb-3 w-50">Add User</button>
+            </form>
         </div>
     </div>
 </template>

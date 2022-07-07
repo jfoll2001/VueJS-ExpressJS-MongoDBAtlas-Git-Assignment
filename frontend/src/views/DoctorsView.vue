@@ -10,39 +10,155 @@ export default {
         DoctorsTable,
         DoctorsModal,
         DoctorsSearch
+    },
+    data() {
+        return {
+            url: 'http://localhost:3001',
+            doctors: [],
+            form: {
+                fname: '',
+                lname: '',
+                phone: '',
+                specialty: ''
+            },
+            // formUser: {
+            //     name: '',
+            //     admin: 'no',
+            //     password: ''
+            // },           
+            editModal: null,
+            toUpdate: 0
+        }
+    },
+    methods: {
+        // Gets the doctors data to display
+        getDoctors() {
+            fetch(`${this.url}/loadDoctors`, {
+                method: 'GET',
+                success(data, status) {
+                    if (status === 'success') {
+                        JSON.parse(data);
+                    };
+                }
+            })
+                .then(response => response.json())
+                .then(data => this.doctors = data)
+        },
+        // Saves doctor
+        saveDoctorHandler(doctor) {
+            fetch(`${this.url}/saveDoctor`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(doctor),
+                success(status) {
+                    if (status === 'success') {
+                        alert("Doctor added successfully");
+                    };
+                }
+            })            
+        },
+        //Opens doctor editor
+        editDoctorHandler(id, i) {
+            this.form.fname = this.doctors[i].fname;
+            this.form.lname = this.doctors[i].lname;
+            this.form.phone = this.doctors[i].phone;
+            this.form.specialty = this.doctors[i].specialty;           
+            this.toUpdate = id;
+            this.editModal.show();
+        },
+        //Edits doctor
+        updateRow() {
+            if (!this.form.fname || !this.form.lname || !this.form.phone || !this.form.specialty) {
+                alert("All fields need to filled out");
+                return;
+            }            
+            fetch(`${this.url}/updateDoctor/${this.toUpdate}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.form)
+            })
+            // //Updates user
+            // fetch(`${this.url}/updateUser/${this.toUpdate}`, {
+            //     method: 'PUT',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(this.formUser)
+            // })
+            // this.getDoctors();
+        },
+        //Deletes doctors and users
+        deleteDoctorHandler(id) {
+            fetch(`${this.url}/deleteDoctor/${id}`, {
+                method: 'DELETE'
+            })
+            this.getDoctors();
+        },
+        //Searches doctors
+        searchDoctorHandler(searchParam) {
+            let param = searchParam;
+            fetch(`${this.url}/searchDoctor/${param}`, {
+                method: 'GET',
+                success(data, status) {
+                    if (status === 'success') {
+                        JSON.parse(data);
+                    };
+                }
+            })
+                .then(response => response.json())
+                .then(data => this.doctors = data)
+        }
+    },
+    mounted() {
+        this.getDoctors();
+        this.editModal = new bootstrap.Modal(document.querySelector('#edit-row'));
     }
 }
 </script>
 
 <template>
+    <title>Doctors Page</title>
     <div class="container-fluid text-center">
         <!-- Return to Admin and Logn in Menus -->
         <div>
-            <span>Return to Admin Menu: </span>
-            <RouterLink to="/admin">Return</RouterLink>
-            <span> or</span>
-            <RouterLink to="/"> Logout</RouterLink>
+            <span>Return to Admin </span>
+            <RouterLink to="/admin">Menu</RouterLink>
+            <span> or </span>
+            <RouterLink to="/">Logout</RouterLink>
         </div>
 
         <!-- Doctors Form -->
-        <DoctorsForm>
-
-        </DoctorsForm>
+        <DoctorsForm @saveDoctor="saveDoctorHandler" />
 
         <!-- Doctors Search -->
-        <DoctorsSearch>
-
-        </DoctorsSearch>
+        <DoctorsSearch @searchDoctor="searchDoctorHandler" />
 
         <!-- Doctors Table -->
-        <DoctorsTable>
-
-        </DoctorsTable>
+        <DoctorsTable :doctors="doctors" @editDoctor="editDoctorHandler" @deleteDoctor="deleteDoctorHandler" />
 
         <!-- Modal For Editing Doctors -->
-        <DoctorsModal>
-
-
+        <DoctorsModal id="edit-row">
+            <template #modal-form>
+                <form @submit.prevent="updateRow">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">First and last name:</span>
+                        <input v-model="form.fname" type="text" class="form-control" placeholder="First Name" required>
+                        <input v-model="form.lname" type="text" class="form-control" placeholder="Last Name" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Phone:</span>
+                        <input v-model="form.phone" type="text" class="form-control" placeholder="xxx-xxx-xxxx"
+                            required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Specialty:</span>
+                        <input v-model="form.specialty" type="text" class="form-control" placeholder="Specialty"
+                            required>
+                    </div>                   
+                    <button type="submit" class="btn btn-primary mt-3 me-5" data-bs-dismiss="modal">Save
+                        changes</button>
+                    <button type="button" class="btn btn-secondary mt-3 ms-5 px-5"
+                        data-bs-dismiss="modal">Close</button>
+                </form>
+            </template>
         </DoctorsModal>
     </div>
 </template>

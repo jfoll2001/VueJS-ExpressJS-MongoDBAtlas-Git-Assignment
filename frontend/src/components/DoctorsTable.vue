@@ -1,5 +1,7 @@
 <script>
-
+export default {
+    props: ['doctors']
+}
 </script>
 
 <template>
@@ -15,13 +17,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>{{}}</td>
-                    <td>{{}}</td>
-                    <td>{{}}</td>
+                <tr v-for="(doctor, i) in doctors" :key="i">
+                    <td>{{ doctor.fname }} {{ doctor.lname }}</td>
+                    <td>{{ doctor.phone }}</td>
+                    <td>{{ doctor.specialty }}</td>
                     <td>
-                        <button class="btn btn-warning px-4 me-4">Edit</button>
-                        <button class="btn btn-danger ms-4">Remove</button>
+                        <button @click="$emit('editDoctor', doctor._id, i)"
+                            class="btn btn-warning px-4 me-4">Edit</button>
+                        <button @click="$emit('deleteDoctor', doctor._id, i)"
+                            class="btn btn-danger ms-4">Remove</button>
                     </td>
                 </tr>
             </tbody>

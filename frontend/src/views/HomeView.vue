@@ -23,19 +23,31 @@ export default {
       })
     },
     getUsers() {
-      fetch(`${this.url}/loginUsers`, {
+      fetch(`${this.url}/loadUsers`, {
         method: 'GET',
         success(data, status) {
           if (status === 'success') {
-            this.users = JSON.parse(data);
+            JSON.parse(data);
           };
         }
       })
-        .then(response => response)
+        .then(response => response.json())
+        .then(data => this.users = data)
     },
     testUserHandler(user) {
-      console.log(this.users)
-      
+      for (var i = 0; i < this.users.length; i++) {
+        if (this.users[i].name == user.name && this.users[i].password == user.password) {
+          if (this.users[i].admin == 'no') {
+            open(`http://localhost:3000/staff`, '_self');
+            return;
+          } else {
+            open(`http://localhost:3000/admin`, '_self');
+            return;
+          }
+        } else {
+          open(`http://localhost:3000/`, '_self');
+        };
+      };
     }
   },
   mounted() {
@@ -47,5 +59,6 @@ export default {
 </script>
 
 <template>
+  <title>Login</title>
   <Login @testUser="testUserHandler" />
 </template>

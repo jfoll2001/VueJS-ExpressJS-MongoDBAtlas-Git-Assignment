@@ -10,6 +10,53 @@ export default {
         UsersModal,
         UsersSearch,
         UsersForm
+    },
+    data() {
+        return {
+            url: 'http://localhost:3001',
+            users: [],
+            form: {
+                name: '',
+                admin: '',
+                password: ''
+            },
+            editModal: null,
+            toUpdate: 0
+        }
+    },
+    methods: {
+        //Gets all of the users
+        getUsers() {
+            fetch(`${this.url}/loadUsers`, {
+                method: 'GET',
+                success(data, status) {
+                    if (status === 'success') {
+                        JSON.parse(data);
+                    };
+                }
+            })
+                .then(response => response.json())
+                .then(data => this.users = data)
+        },
+        //Saves user
+        saveUserHandler(user) {            
+            fetch(`${this.url}/saveUser`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            })
+        },
+        //Edits user
+        editUserHandler() {
+
+        },
+        //Deletes user
+        deleteUserHandler() {
+
+        }
+    },
+    mounted() {
+        this.getUsers();
     }
 }
 </script>
@@ -18,20 +65,20 @@ export default {
     <div class="container-fluid text-center">
         <!-- Return to Admin and Logn in Menus -->
         <div>
-            <span>Return to Admin Menu: </span>
-            <RouterLink to="/admin">Return</RouterLink>
-            <span> or</span>
-            <RouterLink to="/"> Logout</RouterLink>
+            <span>Return to Admin </span>
+            <RouterLink to="/admin">Menu</RouterLink>
+            <span> or </span>
+            <RouterLink to="/">Logout</RouterLink>
         </div>
 
         <!-- User Form -->
-        <UsersForm></UsersForm>
+        <UsersForm @saveUser="saveUserHandler" />
 
         <!-- User Search -->
-        <UsersSearch></UsersSearch>
+        <UsersSearch />
 
         <!-- User Table -->
-        <UsersTable></UsersTable>
+        <UsersTable :users="users" @editUser="editUserHandler" @deleteUser="deleteUserHandler" />
 
         <!-- User Modal -->
         <UsersModal></UsersModal>
