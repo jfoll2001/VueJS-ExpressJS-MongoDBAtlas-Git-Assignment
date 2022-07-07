@@ -55,14 +55,14 @@ export default {
                         alert("Doctor added successfully");
                     };
                 }
-            })            
+            })
         },
         //Opens doctor editor
         editDoctorHandler(id, i) {
             this.form.fname = this.doctors[i].fname;
             this.form.lname = this.doctors[i].lname;
             this.form.phone = this.doctors[i].phone;
-            this.form.specialty = this.doctors[i].specialty;           
+            this.form.specialty = this.doctors[i].specialty;
             this.toUpdate = id;
             this.editModal.show();
         },
@@ -71,21 +71,14 @@ export default {
             if (!this.form.fname || !this.form.lname || !this.form.phone || !this.form.specialty) {
                 alert("All fields need to filled out");
                 return;
-            }            
+            }
             fetch(`${this.url}/updateDoctor/${this.toUpdate}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(this.form)
             })
-            // //Updates user
-            // fetch(`${this.url}/updateUser/${this.toUpdate}`, {
-            //     method: 'PUT',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(this.formUser)
-            // })
-            // this.getDoctors();
         },
-        //Deletes doctors and users
+        //Deletes doctors
         deleteDoctorHandler(id) {
             fetch(`${this.url}/deleteDoctor/${id}`, {
                 method: 'DELETE'
@@ -117,7 +110,7 @@ export default {
 <template>
     <title>Doctors Page</title>
     <div class="container-fluid text-center">
-        <!-- Return to Admin and Logn in Menus -->
+        <!-- Return to Admin and Login Menus -->
         <div>
             <span>Return to Admin </span>
             <RouterLink to="/admin">Menu</RouterLink>
@@ -152,7 +145,7 @@ export default {
                         <span class="input-group-text">Specialty:</span>
                         <input v-model="form.specialty" type="text" class="form-control" placeholder="Specialty"
                             required>
-                    </div>                   
+                    </div>
                     <button type="submit" class="btn btn-primary mt-3 me-5" data-bs-dismiss="modal">Save
                         changes</button>
                     <button type="button" class="btn btn-secondary mt-3 ms-5 px-5"

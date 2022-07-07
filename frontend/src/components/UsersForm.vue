@@ -12,8 +12,7 @@ export default {
         }
     },
     methods: {
-        saveUser() {
-            console.log(this.user)
+        saveUser() {           
             if (!this.user.name || !this.user.password) {
                 alert("All fields need to filled out");
                 return;

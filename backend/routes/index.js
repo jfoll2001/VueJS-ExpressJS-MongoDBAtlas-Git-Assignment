@@ -114,4 +114,29 @@ router.put('/updateUser/:updateid', async (req, res) => {
     });
 });
 
+//Deletes user
+router.delete('/deleteUser/:id', async (req, res) => {
+    let id = req.params.id;
+    let query = { _id: new mongodb.ObjectId(id) };
+    await client.db().collection('users').deleteOne(query, (err, result) => {
+        if (err) throw err;
+        res.end();
+    });
+});
+
+//Searches users
+router.get('/searchUser/:param', async (req, res) => {
+    let param = req.params.param;
+    let query = {
+        $or: [
+            { name: new RegExp(param, 'i') }
+        ]
+    };
+    await client.db().collection('users').find(query).toArray((err, result) => {
+        if (err) throw err;
+        res.send(JSON.stringify(result));
+        res.end();
+    });
+});
+
 module.exports = router;
