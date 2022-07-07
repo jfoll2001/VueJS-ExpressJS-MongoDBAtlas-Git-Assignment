@@ -18,10 +18,10 @@ export default {
     <div class="container-fluid text-center">
         <!-- Return to Staff and Logn in Menus -->
         <div>
-            <span>Return to Staff Menu: </span>
-            <RouterLink to="/staff">Return</RouterLink>
-            <span> or</span>
-            <RouterLink to="/"> Logout</RouterLink>
+            <span>Return to Staff </span>
+            <RouterLink to="/staff">Menu</RouterLink>
+            <span> or </span>
+            <RouterLink to="/">Logout</RouterLink>
         </div>
 
         <!-- Patient Form -->

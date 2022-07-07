@@ -12,6 +12,7 @@ export default {
     }
   },
   methods: {
+    //Tests to see if collections exist
     testCollection() {
       fetch(`${this.url}/testCollections`, {
         method: 'GET',
@@ -22,6 +23,7 @@ export default {
         }
       })
     },
+    //Gets users
     getUsers() {
       fetch(`${this.url}/loadUsers`, {
         method: 'GET',
@@ -34,10 +36,11 @@ export default {
         .then(response => response.json())
         .then(data => this.users = data)
     },
+    //User validation
     testUserHandler(user) {
       for (var i = 0; i < this.users.length; i++) {
         if (this.users[i].name == user.name && this.users[i].password == user.password) {
-          if (this.users[i].admin == 'no') {
+          if (this.users[i].admin == 'false') {
             open(`http://localhost:3000/staff`, '_self');
             return;
           } else {
