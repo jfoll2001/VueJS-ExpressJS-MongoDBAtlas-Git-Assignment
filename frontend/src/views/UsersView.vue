@@ -41,10 +41,16 @@ export default {
         },
         //Saves user
         saveUserHandler(user) {
-            fetch(`${this.url}/saveUser`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user)
+            this.users.forEach(u => {
+                if (u.name == user.name) {
+                    alert('Username taken');
+                } else {
+                    fetch(`${this.url}/saveUser`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(user)
+                    })
+                }
             })
         },
         //Opens user editor
@@ -57,19 +63,35 @@ export default {
         },
         //Edits user
         updateRow() {
+            var usernameVal = /[a-zA-Z0-9]/;
+            var passwordVal2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
             if (!this.form.name || !this.form.password) {
                 alert("All fields need to filled out");
                 return;
-            } else if (this.form.password != this.passwordVal) {
-                alert("Passwords need to match");
-                return;
+            } else {
+                if (!usernameVal.test(this.form.name)) {
+                    alert("Incorrect format for username");
+                    return;
+                } else if (!passwordVal2.test(this.form.password)) {
+                    alert("Incorrect format for password");
+                    return;
+                } else if (this.form.password != this.passwordVal) {
+                    alert("Passwords need to match");
+                    return;
+                }
             }
-            fetch(`${this.url}/updateUser/${this.toUpdate}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.form)
+            this.users.forEach(u => {
+                if (u.name == this.form.name) {
+                    alert('Username taken or no changes made');
+                } else {
+                    fetch(`${this.url}/updateUser/${this.toUpdate}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.form)
+                    })
+                    this.getUsers();
+                }
             })
-            this.getUsers();
         },
         //Deletes user
         deleteUserHandler(id) {

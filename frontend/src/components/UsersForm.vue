@@ -11,13 +11,23 @@ export default {
         }
     },
     methods: {
-        saveUser() {           
+        saveUser() {
+            var usernameVal = /[a-zA-Z0-9]/;
+            var passwordVal2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
             if (!this.user.name || !this.user.password) {
                 alert("All fields need to filled out");
                 return;
-            } else if (this.user.password != this.passwordVal) {
-                alert("Passwords need to match");
-                return;
+            } else {
+                if (!usernameVal.test(this.user.name)) {
+                    alert("Incorrect format for username");
+                    return;
+                } else if (!passwordVal2.test(this.user.password)) {
+                    alert("Incorrect format for password");
+                    return;
+                } else if (this.user.password != this.passwordVal) {
+                    alert("Passwords need to match");
+                    return;
+                }
             }
             this.$emit('saveUser', this.user);
         }

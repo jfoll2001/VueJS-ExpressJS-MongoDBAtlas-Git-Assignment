@@ -40,15 +40,16 @@ export default {
                 .then(data => this.doctors = data)
         },
         //Saves Doctor
-        saveDoctorHandler(doctor) {            
-            fetch(`${this.url}/saveDoctor`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(doctor),
-                success(status) {
-                    if (status === 'success') {
-                        alert("Doctor added successfully");
-                    };
+        saveDoctorHandler(doctor) {
+            this.doctors.forEach(doc => {
+                if (doc.lname == doctor.lname && doc.fname == doctor.fname || doc.phone == doctor.phone) {
+                    alert('Doctor already in system');
+                } else {
+                    fetch(`${this.url}/saveDoctor`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(doctor)                        
+                    })
                 }
             })
         },
@@ -61,16 +62,27 @@ export default {
             this.toUpdate = id;
             this.editModal.show();
         },
-        //Edits doctor
+        //Edits Doctor
         updateRow() {
+            var genralVal = /^[A-Za-z]+$/;
+            var phoneVal = /^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$/;
             if (!this.form.fname || !this.form.lname || !this.form.phone || !this.form.specialty) {
                 alert("All fields need to filled out");
                 return;
+            } else if (!genralVal.test(this.form.fname) || !genralVal.test(this.form.lname) || !genralVal.test(this.form.specialty) || !phoneVal.test(this.form.phone)) {
+                alert("One or more fields are wrong");
+                return;
             }
-            fetch(`${this.url}/updateDoctor/${this.toUpdate}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.form)
+            this.doctors.forEach(doc => {
+                if (doc.lname == this.form.lname && doc.fname == this.form.fname || doc.phone == this.form.phone) {
+                    alert('Doctor already in system or no changes made');
+                } else {
+                    fetch(`${this.url}/updateDoctor/${this.toUpdate}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.form)
+                    })
+                }
             })
         },
         //Deletes Doctors

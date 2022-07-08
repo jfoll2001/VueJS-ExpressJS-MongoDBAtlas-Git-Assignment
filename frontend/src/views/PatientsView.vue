@@ -29,7 +29,7 @@ export default {
         }
     },
     methods: {
-        //Displays patient data
+        //Loads Patients
         getPatients() {
             fetch(`${this.url}/loadPatients`, {
                 method: 'GET',
@@ -42,7 +42,7 @@ export default {
                 .then(response => response.json())
                 .then(data => this.patients = data)
         },
-        //Saves patient
+        //Saves Patient
         savePatientHandler(patient) {
             fetch(`${this.url}/savePatient`, {
                 method: 'POST',
@@ -67,7 +67,7 @@ export default {
             this.toUpdate = id;
             this.editModal.show();
         },
-        //Edits patient
+        //Edits Patient
         updateRow() {            
             fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
                 method: 'PUT',
@@ -75,14 +75,14 @@ export default {
                 body: JSON.stringify(this.form)
             })
         },
-        //Deletes patient
+        //Deletes Patient
         deletePatientHandler(id) {
             fetch(`${this.url}/deletePatient/${id}`, {
                 method: 'DELETE'
             })
             this.getPatients();
         },
-        //Searches patients
+        //Searches Patients
         searchPatientHandler(searchParam) {
             let param = searchParam;
             fetch(`${this.url}/searchPatient/${param}`, {
