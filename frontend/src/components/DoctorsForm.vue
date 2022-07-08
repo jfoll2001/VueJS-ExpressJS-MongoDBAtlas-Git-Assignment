@@ -12,8 +12,13 @@ export default {
     },
     methods: {
         saveDoctor() {
-            if (!this.doctor.fname || !this.doctor.lname || !this.doctor.phone || !this.doctor.specialty || !this.doctor.password) {
+            var genralVal = /^[A-Za-z]+$/;
+            var phoneVal = /^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$/;
+            if (!this.doctor.fname || !this.doctor.lname || !this.doctor.phone || !this.doctor.specialty) {
                 alert("All fields need to filled out");
+                return;
+            } else if (!genralVal.test(this.doctor.fname) || !genralVal.test(this.doctor.lname) || !genralVal.test(this.doctor.specialty) || !phoneVal.test(this.doctor.phone)) {
+                alert("One or more fields are wrong");
                 return;
             }
             this.$emit('saveDoctor', this.doctor);
@@ -37,7 +42,7 @@ export default {
                     <input v-model="doctor.phone" type="text" class="form-control" placeholder="xxx-xxx-xxxx" required>
                     <span class="input-group-text">Specialty:</span>
                     <input v-model="doctor.specialty" type="text" class="form-control" placeholder="Specialty" required>
-                </div>                
+                </div>
                 <button @click="saveDoctor" class="btn btn-primary w-25">Submit</button>
             </form>
             <hr>

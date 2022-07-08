@@ -91,6 +91,7 @@ export default {
             })
                 .then(response => response.json())
                 .then(data => this.users = data)
+            console.log(this.users)
         }
     },
     mounted() {

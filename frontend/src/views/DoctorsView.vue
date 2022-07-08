@@ -26,7 +26,7 @@ export default {
         }
     },
     methods: {
-        // Gets the doctors data to display
+        //Loads Doctors
         getDoctors() {
             fetch(`${this.url}/loadDoctors`, {
                 method: 'GET',
@@ -39,8 +39,8 @@ export default {
                 .then(response => response.json())
                 .then(data => this.doctors = data)
         },
-        // Saves doctor
-        saveDoctorHandler(doctor) {
+        //Saves Doctor
+        saveDoctorHandler(doctor) {            
             fetch(`${this.url}/saveDoctor`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -73,14 +73,14 @@ export default {
                 body: JSON.stringify(this.form)
             })
         },
-        //Deletes doctors
+        //Deletes Doctors
         deleteDoctorHandler(id) {
             fetch(`${this.url}/deleteDoctor/${id}`, {
                 method: 'DELETE'
             })
             this.getDoctors();
         },
-        //Searches doctors
+        //Searches Doctors
         searchDoctorHandler(searchParam) {
             let param = searchParam;
             fetch(`${this.url}/searchDoctor/${param}`, {
@@ -95,10 +95,12 @@ export default {
                 .then(data => this.doctors = data)
         }
     },
+
     mounted() {
         this.getDoctors();
         this.editModal = new bootstrap.Modal(document.querySelector('#edit-row'));
     }
+
 }
 </script>
 

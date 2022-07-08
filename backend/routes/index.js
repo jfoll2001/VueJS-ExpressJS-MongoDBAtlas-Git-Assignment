@@ -27,16 +27,7 @@ router.get('/testCollections', async (req, res) => {
     });
 });
 
-//Gets the list of users
-router.get('/loadUsers', async (req, res) => {
-    await client.db().collection('users').find().toArray((err, result) => {
-        if (err) throw err;
-        res.send(JSON.stringify(result));
-        res.end();
-    });
-});
-
-//Gets the list of doctors on load
+//Loads Doctors
 router.get('/loadDoctors', async (req, res) => {
     await client.db().collection('doctors').find().toArray((err, result) => {
         if (err) throw err;
@@ -45,7 +36,7 @@ router.get('/loadDoctors', async (req, res) => {
     });
 });
 
-//Adds doctor to list
+//Adds Doctor
 router.post('/saveDoctor', async (req, res) => {
     let form = req.body;
     await client.db().collection('doctors').insertOne(form, (err, result) => {
@@ -54,7 +45,7 @@ router.post('/saveDoctor', async (req, res) => {
     });
 });
 
-//Updates doctor
+//Updates Doctor
 router.put('/updateDoctor/:updateid', async (req, res) => {
     let updateid = req.params.updateid;
     let form = req.body;
@@ -66,7 +57,7 @@ router.put('/updateDoctor/:updateid', async (req, res) => {
     });
 });
 
-//Deletes doctor
+//Deletes Doctor
 router.delete('/deleteDoctor/:id', async (req, res) => {
     let id = req.params.id;
     let query = { _id: new mongodb.ObjectId(id) };
@@ -76,7 +67,7 @@ router.delete('/deleteDoctor/:id', async (req, res) => {
     });
 });
 
-//Searches doctors
+//Searches Doctors
 router.get('/searchDoctor/:param', async (req, res) => {
     let param = req.params.param;
     let query = {
@@ -93,7 +84,16 @@ router.get('/searchDoctor/:param', async (req, res) => {
     });
 });
 
-//Adds user to list
+//Loads User
+router.get('/loadUsers', async (req, res) => {
+    await client.db().collection('users').find().toArray((err, result) => {
+        if (err) throw err;
+        res.send(JSON.stringify(result));
+        res.end();
+    });
+});
+
+//Adds User
 router.post('/saveUser', async (req, res) => {
     let form = req.body;
     await client.db().collection('users').insertOne(form, (err, result) => {
@@ -102,7 +102,7 @@ router.post('/saveUser', async (req, res) => {
     });
 });
 
-//Updates user
+//Updates User
 router.put('/updateUser/:updateid', async (req, res) => {
     let updateid = req.params.updateid;
     let form = req.body;
@@ -114,7 +114,7 @@ router.put('/updateUser/:updateid', async (req, res) => {
     });
 });
 
-//Deletes user
+//Deletes User
 router.delete('/deleteUser/:id', async (req, res) => {
     let id = req.params.id;
     let query = { _id: new mongodb.ObjectId(id) };
@@ -124,12 +124,12 @@ router.delete('/deleteUser/:id', async (req, res) => {
     });
 });
 
-//Searches users
+//Searches Users
 router.get('/searchUser/:param', async (req, res) => {
     let param = req.params.param;
     let query = {
         $or: [
-            { name: new RegExp(param, 'i') }
+            { name: new RegExp(`^${param}$`) }
         ]
     };
     await client.db().collection('users').find(query).toArray((err, result) => {
@@ -139,7 +139,7 @@ router.get('/searchUser/:param', async (req, res) => {
     });
 });
 
-//Loads patients
+//Loads Patients
 router.get('/loadPatients', async (req, res) => {
     await client.db().collection('patients').find().toArray((err, result) => {
         if (err) throw err;
@@ -148,7 +148,7 @@ router.get('/loadPatients', async (req, res) => {
     });
 });
 
-//Adds patient
+//Adds Patient
 router.post('/savePatient', async (req, res) => {
     let form = req.body;
     await client.db().collection('patients').insertOne(form, (err, result) => {
@@ -157,7 +157,7 @@ router.post('/savePatient', async (req, res) => {
     });
 });
 
-//Updates patient
+//Updates Patient
 router.put('/updatePatient/:updateid', async (req, res) => {
     let updateid = req.params.updateid;
     let form = req.body;
@@ -169,7 +169,7 @@ router.put('/updatePatient/:updateid', async (req, res) => {
     });
 });
 
-//Deletes patient
+//Deletes Patient
 router.delete('/deletePatient/:id', async (req, res) => {
     let id = req.params.id;
     let query = { _id: new mongodb.ObjectId(id) };
@@ -179,7 +179,7 @@ router.delete('/deletePatient/:id', async (req, res) => {
     });
 });
 
-//Searches patients
+//Searches Patients
 router.get('/searchPatient/:param', async (req, res) => {
     let param = req.params.param;
     let query = {
@@ -197,7 +197,7 @@ router.get('/searchPatient/:param', async (req, res) => {
     });
 });
 
-//Gets all appointments
+//Loads Appointments
 router.get('/loadAppoints', async (req, res) => {
     await client.db().collection('appointments').find().toArray((err, result) => {
         if (err) throw err;
@@ -206,7 +206,7 @@ router.get('/loadAppoints', async (req, res) => {
     });
 });
 
-//Saves appointment
+//Saves Appointment
 router.post('/saveAppoint', async (req, res) => {
     let form = req.body;
     await client.db().collection('appointments').insertOne(form, (err, result) => {
@@ -215,7 +215,7 @@ router.post('/saveAppoint', async (req, res) => {
     });
 });
 
-//Updates appointment
+//Updates Appointment
 router.put('/updateAppoint/:updateid', async (req, res) => {
     let updateid = req.params.updateid;
     let form = req.body;
@@ -227,7 +227,7 @@ router.put('/updateAppoint/:updateid', async (req, res) => {
     });
 });
 
-//Deletes appointment
+//Deletes Appointment
 router.delete('/deleteAppoint/:id', async (req, res) => {
     let id = req.params.id;
     let query = { _id: new mongodb.ObjectId(id) };
@@ -237,7 +237,7 @@ router.delete('/deleteAppoint/:id', async (req, res) => {
     });
 });
 
-//Searches appointments
+//Searches Appointments
 router.get('/searchAppoint/:param', async (req, res) => {
     let param = req.params.param;
     let query = {

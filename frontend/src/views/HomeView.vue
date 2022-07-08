@@ -7,8 +7,7 @@ export default {
   },
   data() {
     return {
-      url: 'http://localhost:3001',
-      users: []
+      url: 'http://localhost:3001'
     }
   },
   methods: {
@@ -23,9 +22,10 @@ export default {
         }
       })
     },
-    //Gets users
-    getUsers() {
-      fetch(`${this.url}/loadUsers`, {
+    //Searches users
+    testUserHandler(user, pass) {
+      let param = user;
+      fetch(`${this.url}/searchUser/${param}`, {
         method: 'GET',
         success(data, status) {
           if (status === 'success') {
@@ -34,28 +34,23 @@ export default {
         }
       })
         .then(response => response.json())
-        .then(data => this.users = data)
-    },
-    //User validation
-    testUserHandler(user) {
-      for (var i = 0; i < this.users.length; i++) {
-        if (this.users[i].name == user.name && this.users[i].password == user.password) {
-          if (this.users[i].admin == 'false') {
-            open(`http://localhost:3000/staff`, '_self');
-            return;
-          } else {
-            open(`http://localhost:3000/admin`, '_self');
-            return;
-          }
-        } else {
+        .then(data => {
+          if (data[0].name === user && data[0].password === pass) {
+            if (data[0].admin === 'false') {
+              open(`http://localhost:3000/staff`, '_self');
+              return;
+            } else {
+              open(`http://localhost:3000/admin`, '_self');
+              return;
+            }
+          };
+          alert('Username or Password incorrect');
           open(`http://localhost:3000/`, '_self');
-        };
-      };
+        })
     }
   },
   mounted() {
     this.testCollection();
-    this.getUsers();
   }
 }
 
