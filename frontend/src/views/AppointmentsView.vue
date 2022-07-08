@@ -155,6 +155,7 @@ export default {
                         </select>
                     </div>
                     <div class="input-group mb-3">
+                        <span class="input-group-text">Status:</span>
                         <select v-model="form.status" class="form-select" required>
                             <option value="Open">Open</option>
                             <option value="Closed">Closed</option>
