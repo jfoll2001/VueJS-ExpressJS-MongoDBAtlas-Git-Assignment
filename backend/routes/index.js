@@ -197,4 +197,64 @@ router.get('/searchPatient/:param', async (req, res) => {
     });
 });
 
+//Gets all appointments
+router.get('/loadAppoints', async (req, res) => {
+    await client.db().collection('appointments').find().toArray((err, result) => {
+        if (err) throw err;
+        res.send(JSON.stringify(result));
+        res.end();
+    });
+});
+
+//Saves appointment
+router.post('/saveAppoint', async (req, res) => {
+    let form = req.body;
+    await client.db().collection('appointments').insertOne(form, (err, result) => {
+        if (err) throw err;
+        res.end();
+    });
+});
+
+//Updates appointment
+router.put('/updateAppoint/:updateid', async (req, res) => {
+    let updateid = req.params.updateid;
+    let form = req.body;
+    let query = { _id: new mongodb.ObjectId(updateid) };
+    let newValues = { $set: form };
+    await client.db().collection('appointments').updateOne(query, newValues, (err, result) => {
+        if (err) throw err;
+        res.end();
+    });
+});
+
+//Deletes appointment
+router.delete('/deleteAppoint/:id', async (req, res) => {
+    let id = req.params.id;
+    let query = { _id: new mongodb.ObjectId(id) };
+    await client.db().collection('appointments').deleteOne(query, (err, result) => {
+        if (err) throw err;
+        res.end();
+    });
+});
+
+//Searches appointments
+router.get('/searchAppoint/:param', async (req, res) => {
+    let param = req.params.param;
+    let query = {
+        $or: [
+            { patient: new RegExp(param, 'i') },
+            { doctor: new RegExp(param, 'i') },
+            { status: new RegExp(param, 'i') },
+            { location: new RegExp(param, 'i') },
+            { date: new RegExp(param, 'i') },
+            { time: new RegExp(param, 'i') }
+        ]
+    };
+    await client.db().collection('appointments').find(query).toArray((err, result) => {
+        if (err) throw err;
+        res.send(JSON.stringify(result));
+        res.end();
+    });
+});
+
 module.exports = router;
