@@ -82,15 +82,27 @@ export default {
                 return;
             }
             for (let i = 0; i < this.patients.length; i++)
-                if (this.patients[i].fname == f.fname && this.patients[i].lname == f.lname || this.patients[i].phone == f.phone) {
-                    alert('Duplicate phone number, patient or no changes made');
+                if (this.patients[i].fname == f.fname && this.patients[i].lname == f.lname) {
+                    alert('Duplicate patient or no changes made');
                     return;
+                } else {
+                    fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.form)
+                    })
+                    this.getPatients();
                 }
+            if (this.patients[i].phone == f.phone) {
+                alert("Duplicate phone number or no changes made");
+                return;
+            }
             fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(this.form)
             })
+            this.getPatients();
         },
         //Deletes Patient
         deletePatientHandler(id) {

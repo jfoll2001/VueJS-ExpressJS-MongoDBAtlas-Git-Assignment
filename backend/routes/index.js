@@ -1,10 +1,10 @@
 var express = require('express');
 const mongodb = require('mongodb');
-const mongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017/clinicsytemdb';
 var router = express.Router();
 
-const client = new mongoClient(url, { useUnifiedTopology: true });
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://Basic:Basic12@cluster1.eutom.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1, sslValidate: false });
 client.connect();
 
 //Tests to see if Collections exists and if not then creates them
@@ -18,18 +18,16 @@ router.get('/testCollections', async (req, res) => {
             res.end(msg);
         }
         else {
-            await client.db().createCollection('users', async (err, result) => {
-                if (err) throw err;
-                msg = 'Collection successfully created';
-                res.end(msg);
-            });
+            if (err) throw err;
+            msg = 'No Collections Exist';
+            res.end(msg);
         }
     });
 });
 
 //Loads Doctors
 router.get('/loadDoctors', async (req, res) => {
-    await client.db().collection('doctors').find().toArray((err, result) => {
+    await client.db("clinicsystemdb").collection('doctors').find().toArray((err, result) => {
         if (err) throw err;
         res.send(JSON.stringify(result));
         res.end();
@@ -39,7 +37,7 @@ router.get('/loadDoctors', async (req, res) => {
 //Adds Doctor
 router.post('/saveDoctor', async (req, res) => {
     let form = req.body;
-    await client.db().collection('doctors').insertOne(form, (err, result) => {
+    await client.db("clinicsystemdb").collection('doctors').insertOne(form, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -51,7 +49,7 @@ router.put('/updateDoctor/:updateid', async (req, res) => {
     let form = req.body;
     let query = { _id: new mongodb.ObjectId(updateid) };
     let newValues = { $set: form };
-    await client.db().collection('doctors').updateOne(query, newValues, (err, result) => {
+    await client.db("clinicsystemdb").collection('doctors').updateOne(query, newValues, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -61,7 +59,7 @@ router.put('/updateDoctor/:updateid', async (req, res) => {
 router.delete('/deleteDoctor/:id', async (req, res) => {
     let id = req.params.id;
     let query = { _id: new mongodb.ObjectId(id) };
-    await client.db().collection('doctors').deleteOne(query, (err, result) => {
+    await client.db("clinicsystemdb").collection('doctors').deleteOne(query, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -77,7 +75,7 @@ router.get('/searchDoctor/:param', async (req, res) => {
             { specialty: new RegExp(param, 'i') }
         ]
     };
-    await client.db().collection('doctors').find(query).toArray((err, result) => {
+    await client.db("clinicsystemdb").collection('doctors').find(query).toArray((err, result) => {
         if (err) throw err;
         res.send(JSON.stringify(result));
         res.end();
@@ -86,7 +84,7 @@ router.get('/searchDoctor/:param', async (req, res) => {
 
 //Loads User
 router.get('/loadUsers', async (req, res) => {
-    await client.db().collection('users').find().toArray((err, result) => {
+    await client.db("clinicsystemdb").collection('users').find().toArray((err, result) => {
         if (err) throw err;
         res.send(JSON.stringify(result));
         res.end();
@@ -96,7 +94,7 @@ router.get('/loadUsers', async (req, res) => {
 //Adds User
 router.post('/saveUser', async (req, res) => {
     let form = req.body;
-    await client.db().collection('users').insertOne(form, (err, result) => {
+    await client.db("clinicsystemdb").collection('users').insertOne(form, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -108,7 +106,7 @@ router.put('/updateUser/:updateid', async (req, res) => {
     let form = req.body;
     let query = { _id: new mongodb.ObjectId(updateid) };
     let newValues = { $set: form };
-    await client.db().collection('users').updateOne(query, newValues, (err, result) => {
+    await client.db("clinicsystemdb").collection('users').updateOne(query, newValues, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -118,7 +116,7 @@ router.put('/updateUser/:updateid', async (req, res) => {
 router.delete('/deleteUser/:id', async (req, res) => {
     let id = req.params.id;
     let query = { _id: new mongodb.ObjectId(id) };
-    await client.db().collection('users').deleteOne(query, (err, result) => {
+    await client.db("clinicsystemdb").collection('users').deleteOne(query, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -132,7 +130,7 @@ router.get('/searchUser/:param', async (req, res) => {
             { name: new RegExp(`^${param}$`) }
         ]
     };
-    await client.db().collection('users').find(query).toArray((err, result) => {
+    await client.db("clinicsystemdb").collection('users').find(query).toArray((err, result) => {
         if (err) throw err;
         res.send(JSON.stringify(result));
         res.end();
@@ -141,7 +139,7 @@ router.get('/searchUser/:param', async (req, res) => {
 
 //Loads Patients
 router.get('/loadPatients', async (req, res) => {
-    await client.db().collection('patients').find().toArray((err, result) => {
+    await client.db("clinicsystemdb").collection('patients').find().toArray((err, result) => {
         if (err) throw err;
         res.send(JSON.stringify(result));
         res.end();
@@ -151,7 +149,7 @@ router.get('/loadPatients', async (req, res) => {
 //Adds Patient
 router.post('/savePatient', async (req, res) => {
     let form = req.body;
-    await client.db().collection('patients').insertOne(form, (err, result) => {
+    await client.db("clinicsystemdb").collection('patients').insertOne(form, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -163,7 +161,7 @@ router.put('/updatePatient/:updateid', async (req, res) => {
     let form = req.body;
     let query = { _id: new mongodb.ObjectId(updateid) };
     let newValues = { $set: form };
-    await client.db().collection('patients').updateOne(query, newValues, (err, result) => {
+    await client.db("clinicsystemdb").collection('patients').updateOne(query, newValues, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -173,7 +171,7 @@ router.put('/updatePatient/:updateid', async (req, res) => {
 router.delete('/deletePatient/:id', async (req, res) => {
     let id = req.params.id;
     let query = { _id: new mongodb.ObjectId(id) };
-    await client.db().collection('patients').deleteOne(query, (err, result) => {
+    await client.db("clinicsystemdb").collection('patients').deleteOne(query, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -190,7 +188,7 @@ router.get('/searchPatient/:param', async (req, res) => {
             { sex: new RegExp(param, 'i') }
         ]
     };
-    await client.db().collection('patients').find(query).toArray((err, result) => {
+    await client.db("clinicsystemdb").collection('patients').find(query).toArray((err, result) => {
         if (err) throw err;
         res.send(JSON.stringify(result));
         res.end();
@@ -199,7 +197,7 @@ router.get('/searchPatient/:param', async (req, res) => {
 
 //Loads Appointments
 router.get('/loadAppoints', async (req, res) => {
-    await client.db().collection('appointments').find().toArray((err, result) => {
+    await client.db("clinicsystemdb").collection('appointments').find().toArray((err, result) => {
         if (err) throw err;
         res.send(JSON.stringify(result));
         res.end();
@@ -209,7 +207,7 @@ router.get('/loadAppoints', async (req, res) => {
 //Saves Appointment
 router.post('/saveAppoint', async (req, res) => {
     let form = req.body;
-    await client.db().collection('appointments').insertOne(form, (err, result) => {
+    await client.db("clinicsystemdb").collection('appointments').insertOne(form, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -221,7 +219,7 @@ router.put('/updateAppoint/:updateid', async (req, res) => {
     let form = req.body;
     let query = { _id: new mongodb.ObjectId(updateid) };
     let newValues = { $set: form };
-    await client.db().collection('appointments').updateOne(query, newValues, (err, result) => {
+    await client.db("clinicsystemdb").collection('appointments').updateOne(query, newValues, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -231,7 +229,7 @@ router.put('/updateAppoint/:updateid', async (req, res) => {
 router.delete('/deleteAppoint/:id', async (req, res) => {
     let id = req.params.id;
     let query = { _id: new mongodb.ObjectId(id) };
-    await client.db().collection('appointments').deleteOne(query, (err, result) => {
+    await client.db("clinicsystemdb").collection('appointments').deleteOne(query, (err, result) => {
         if (err) throw err;
         res.end();
     });
@@ -250,7 +248,7 @@ router.get('/searchAppoint/:param', async (req, res) => {
             { time: new RegExp(param, 'i') }
         ]
     };
-    await client.db().collection('appointments').find(query).toArray((err, result) => {
+    await client.db("clinicsystemdb").collection('appointments').find(query).toArray((err, result) => {
         if (err) throw err;
         res.send(JSON.stringify(result));
         res.end();

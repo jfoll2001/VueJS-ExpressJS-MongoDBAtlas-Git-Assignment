@@ -35,6 +35,7 @@ export default {
       })
         .then(response => response.json())
         .then(data => {
+          console.log(data)
           if (data[0].name === user && data[0].password === pass) {
             if (data[0].admin === 'false') {
               open(`http://localhost:3000/staff`, '_self');

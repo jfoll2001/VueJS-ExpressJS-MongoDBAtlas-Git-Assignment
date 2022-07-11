@@ -91,7 +91,6 @@ export default {
                 body: JSON.stringify(this.form)
             })
             this.getUsers();
-
         },
         //Deletes User
         deleteUserHandler(id) {

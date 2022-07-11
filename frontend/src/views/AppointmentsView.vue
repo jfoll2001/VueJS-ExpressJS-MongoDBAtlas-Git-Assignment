@@ -103,12 +103,13 @@ export default {
                 return;
             }
             for (let i = 0; i < this.appoints.length; i++)
-                if (this.appoints[i].status != f.status) {
+                if (this.appoints[i].status != f.status || this.appoints[i].location != f.location) {
                     fetch(`${this.url}/updateAppoint/${this.toUpdate}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(this.form)
                     })
+                    this.getAppionts()
                 } else if (this.appoints[i].patient == f.patient && this.appoints[i].doctor == f.doctor && this.appoints[i].date == f.date && this.appoints[i].time == f.time) {
                     alert('Appointment already exists or no changes made');
                     return;

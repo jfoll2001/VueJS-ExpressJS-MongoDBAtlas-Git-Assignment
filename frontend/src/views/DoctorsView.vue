@@ -74,15 +74,27 @@ export default {
                 return;
             }
             for (let i = 0; i < this.doctors.length; i++)
-                if (this.doctors[i].lname == this.form.lname && this.doctors[i].fname == this.form.fname || this.doctors[i].phone == this.form.phone) {
-                    alert('Doctor already in system, phone numbers match, or no changes made');
+                if (this.doctors[i].lname == this.form.lname && this.doctors[i].fname == this.form.fname) {
+                    alert('Doctor already in system or no changes made');
                     return;
+                } else {
+                    fetch(`${this.url}/updateDoctor/${this.toUpdate}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.form)
+                    })
+                    this.getDoctors();
                 }
+            if (this.doctors[i].phone == this.form.phone) {
+                alert('Phone numbers match or no changes made');
+                return;
+            }
             fetch(`${this.url}/updateDoctor/${this.toUpdate}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(this.form)
             })
+            this.getDoctors();
         },
         //Deletes Doctors
         deleteDoctorHandler(id) {
