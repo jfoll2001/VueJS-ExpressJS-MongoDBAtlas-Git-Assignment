@@ -8,6 +8,10 @@ export default {
     },
     methods: {
         testUser() {
+            if (!this.user || !this.pass) {
+                alert('No username or password entered');
+                return;
+            }
             this.$emit('testUser', this.user, this.pass);
         }
     }
