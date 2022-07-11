@@ -41,18 +41,17 @@ export default {
         },
         //Saves user
         saveUserHandler(user) {
-            this.users.forEach(u => {
-                if (u.name == user.name) {
+            for (let i = 0; i < this.users.length; i++)
+                if (this.users[i].name == user.name) {
                     alert('Username taken');
-                    user = null;
                     return;
                 }
-                fetch(`${this.url}/saveUser`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(user)
-                })
-            });
+            fetch(`${this.url}/saveUser`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            })
+            return;
         },
         //Opens user editor
         editUserHandler(id, i) {
@@ -81,19 +80,18 @@ export default {
                     return;
                 }
             }
-            this.users.forEach(u => {
-                if (u.name == this.form.name) {
+            for (let i = 0; i < this.users.length; i++)
+                if (this.users[i].name == this.form.name) {
                     alert('Username taken or no changes made');
                     return;
-                } else {
-                    fetch(`${this.url}/updateUser/${this.toUpdate}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(this.form)
-                    })
-                    this.getUsers();
                 }
+            fetch(`${this.url}/updateUser/${this.toUpdate}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.form)
             })
+            this.getUsers();
+
         },
         //Deletes user
         deleteUserHandler(id) {

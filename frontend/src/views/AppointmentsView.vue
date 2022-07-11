@@ -69,23 +69,20 @@ export default {
         },
         //Saves appointment
         saveAppointHandler(appointment) {
-            this.appoints.forEach(a => {
-                if (a.patient == appointment.patient && a.doctor == appointment.doctor && a.date == appointment.date && a.time == appointment.time) {
+            for (let i = 0; i < this.appoints.length; i++)
+                if (this.appoints[i].patient == appointment.patient && this.appoints[i].doctor == appointment.doctor && this.appoints[i].date == appointment.date && this.appoints[i].time == appointment.time) {
                     alert('Appointment already exists');
-                    appointment = null;
                     return;
-                } else if (a.date == appointment.date && a.time == appointment.time) {
+                } else if (this.appoints[i].date == appointment.date && this.appoints[i].time == appointment.time) {
                     alert('Appointment already at that date and time');
-                    appointment = null;
                     return;
-                } else {
-                    fetch(`${this.url}/saveAppoint`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(appointment)
-                    })
-                };
-            });
+                }
+            fetch(`${this.url}/saveAppoint`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(appointment)
+            })
+            return;
         },
         //Opens appointment editor
         editApointsHandler(id, i) {
@@ -105,21 +102,25 @@ export default {
                 alert("All fields need to be filled out");
                 return;
             }
-            this.appoints.forEach(a => {
-                if (a.patient == f.patient && a.doctor == f.doctor && a.date == f.date && a.time == f.time) {
-                    alert('Appointment already exists');
-                    return;
-                } else if (a.date == f.date && a.time == f.time) {
-                    alert('Appointment already at that date and time');
-                    return;
-                } else {
+            for (let i = 0; i < this.appoints.length; i++)
+                if (this.appoints[i].status != f.status) {
                     fetch(`${this.url}/updateAppoint/${this.toUpdate}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(this.form)
                     })
-                };
-            });
+                } else if (this.appoints[i].patient == f.patient && this.appoints[i].doctor == f.doctor && this.appoints[i].date == f.date && this.appoints[i].time == f.time) {
+                    alert('Appointment already exists or no changes made');
+                    return;
+                } else if (this.appoints[i].date == f.date && this.appoints[i].time == f.time) {
+                    alert('Appointment already at that date and time');
+                    return;
+                }
+            fetch(`${this.url}/updateAppoint/${this.toUpdate}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.form)
+            })
             this.getAppionts();
         },
         //Deletes appointment

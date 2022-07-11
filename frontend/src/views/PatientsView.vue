@@ -44,19 +44,17 @@ export default {
         },
         //Saves Patient
         savePatientHandler(patient) {
-            this.patients.forEach(p => {
-                if (p.fname == patient.fname && p.lname == patient.lname || p.phone == patient.phone) {
-                    alert('Phone number or duplicate Patient');
-                    patient = null;
+            for (let i = 0; i < this.patients.length; i++)
+                if (this.patients[i].fname == patient.fname && this.patients[i].lname == patient.lname || this.patients[i].phone == patient.phone) {
+                    alert('Duplicate phone number or patient');
                     return;
-                } else {
-                    fetch(`${this.url}/savePatient`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(patient)
-                    })
-                };
-            });
+                }
+            fetch(`${this.url}/savePatient`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(patient)
+            })
+            return;
         },
         //Opens patient editor
         editPatientHandler(id, i) {
@@ -83,17 +81,16 @@ export default {
                 alert("One or more fields are wrong");
                 return;
             }
-            this.patients.forEach(p => {
-                if (p.fname == f.fname && p.lname == f.lname || p.phone == f.phone) {
+            for (let i = 0; i < this.patients.length; i++)
+                if (this.patients[i].fname == f.fname && this.patients[i].lname == f.lname || this.patients[i].phone == f.phone) {
                     alert('Duplicate phone number, patient or no changes made');
                     return;
                 }
-                fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(this.form)
-                })
-            });
+            fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.form)
+            })
         },
         //Deletes Patient
         deletePatientHandler(id) {
