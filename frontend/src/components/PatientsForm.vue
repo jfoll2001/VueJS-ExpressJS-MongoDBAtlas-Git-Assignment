@@ -15,6 +15,17 @@ export default {
     },
     methods: {
         savePatient() {
+            var p = this.patient;
+            var genralVal = /^[A-Za-z]+$/;
+            var phoneVal = /^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$/;
+            var zipVal = /^[0-9]{6}$/;
+            if (!p.fname || !p.lname || !p.sex || !p.dateofbirth || !p.phone || !p.address || !p.zipcode) {
+                alert("All fields need to be filled out");
+                return;
+            } else if (!genralVal.test(p.fname) || !genralVal.test(p.lname) || !phoneVal.test(p.phone) || !zipVal.test(p.zipcode)) {
+                alert("One or more fields are wrong");
+                return;
+            }
             this.$emit('savePatient', this.patient);
         }
     }

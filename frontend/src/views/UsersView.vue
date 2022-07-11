@@ -50,7 +50,7 @@ export default {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(user)
                     })
-                }
+                };
             })
         },
         //Opens user editor
@@ -83,6 +83,7 @@ export default {
             this.users.forEach(u => {
                 if (u.name == this.form.name) {
                     alert('Username taken or no changes made');
+                    return;
                 } else {
                     fetch(`${this.url}/updateUser/${this.toUpdate}`, {
                         method: 'PUT',

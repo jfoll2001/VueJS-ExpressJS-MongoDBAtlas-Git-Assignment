@@ -44,15 +44,17 @@ export default {
         },
         //Saves Patient
         savePatientHandler(patient) {
-            fetch(`${this.url}/savePatient`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(patient),
-                success(status) {
-                    if (status === 'success') {
-                        alert("Patient added successfully");
-                    };
-                }
+            this.patients.forEach(p => {
+                if (p.fname == patient.fname && p.lname == patient.lname || p.phone == patient.phone) {
+                    alert('Phone number or duplicate Patient');
+                    return;
+                } else {
+                    fetch(`${this.url}/savePatient`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(patient)
+                    })
+                };
             })
         },
         //Opens patient editor
@@ -68,12 +70,32 @@ export default {
             this.editModal.show();
         },
         //Edits Patient
-        updateRow() {            
-            fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.form)
+        updateRow() {
+            var f = this.form;
+            var genralVal = /^[A-Za-z]+$/;
+            var phoneVal = /^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$/;
+            var zipVal = /^[0-9]{6}$/;
+            if (!f.fname || !f.lname || !f.sex || !f.dateofbirth || !f.phone || !f.address || !f.zipcode) {
+                alert("All fields need to be filled out");
+                return;
+            } else if (!genralVal.test(f.fname) || !genralVal.test(f.lname) || !phoneVal.test(f.phone) || !zipVal.test(f.zipcode)) {
+                alert("One or more fields are wrong");
+                return;
+            }
+            this.patients.forEach(p => {
+                if (p.fname == f.fname && p.lname == f.lname || p.phone == f.phone) {
+                    alert('Duplicate phone number, patient or no changes made');   
+                    return;                
+                } else {
+                    fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.form)
+                    })
+                };
             })
+
+
         },
         //Deletes Patient
         deletePatientHandler(id) {
@@ -122,7 +144,7 @@ export default {
         <PatientsSearch @searchPatient="searchPatientHandler" />
 
         <!-- Patient Table -->
-        <PatientsTable :patients="patients" @editPatient="editPatientHandler"  @deletePatient="deletePatientHandler"/>
+        <PatientsTable :patients="patients" @editPatient="editPatientHandler" @deletePatient="deletePatientHandler" />
 
         <!-- Patient Modal -->
         <PatientsModal id="edit-row">
