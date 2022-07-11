@@ -53,7 +53,7 @@ export default {
             })
             return;
         },
-        //Opens doctor editor
+        //Opens Doctor editor with data
         editDoctorHandler(id, i) {
             this.form.fname = this.doctors[i].fname;
             this.form.lname = this.doctors[i].lname;
@@ -62,7 +62,7 @@ export default {
             this.toUpdate = id;
             this.editModal.show();
         },
-        //Edits Doctor
+        //Edits Doctor and Saves edited data
         updateRow() {
             var genralVal = /^[A-Za-z]+$/;
             var phoneVal = /^\(?([0-9]{3})\)?[-]?([0-9]{3})[-]?([0-9]{4})$/;

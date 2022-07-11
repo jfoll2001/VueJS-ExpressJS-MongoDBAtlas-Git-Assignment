@@ -56,7 +56,7 @@ export default {
             })
             return;
         },
-        //Opens patient editor
+        //Opens Patient editor with data
         editPatientHandler(id, i) {
             this.form.fname = this.patients[i].fname;
             this.form.lname = this.patients[i].lname;
@@ -68,7 +68,7 @@ export default {
             this.toUpdate = id;
             this.editModal.show();
         },
-        //Edits Patient
+        //Edits Patient and Saves edited data
         updateRow() {
             var f = this.form;
             var genralVal = /^[A-Za-z]+$/;

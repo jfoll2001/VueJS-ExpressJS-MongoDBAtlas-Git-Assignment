@@ -84,7 +84,7 @@ export default {
             })
             return;
         },
-        //Opens appointment editor
+        //Opens Appointment editor with data
         editApointsHandler(id, i) {
             this.form.date = this.appoints[i].date;
             this.form.doctor = this.appoints[i].doctor;
@@ -95,7 +95,7 @@ export default {
             this.toUpdate = id;
             this.editModal.show();
         },
-        //Edits appointment
+        //Edits Appointment and Saves edited data
         updateRow() {
             var f = this.form;
             if (!f.location || !f.doctor || !f.patient || !f.date || !f.time) {

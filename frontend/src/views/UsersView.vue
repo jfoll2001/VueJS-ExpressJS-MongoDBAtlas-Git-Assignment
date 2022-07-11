@@ -26,7 +26,7 @@ export default {
         }
     },
     methods: {
-        //Gets all of the users
+        //Loads Users
         getUsers() {
             fetch(`${this.url}/loadUsers`, {
                 method: 'GET',
@@ -39,7 +39,7 @@ export default {
                 .then(response => response.json())
                 .then(data => this.users = data)
         },
-        //Saves user
+        //Saves User
         saveUserHandler(user) {
             for (let i = 0; i < this.users.length; i++)
                 if (this.users[i].name == user.name) {
@@ -53,7 +53,7 @@ export default {
             })
             return;
         },
-        //Opens user editor
+        //Opens User editor with data
         editUserHandler(id, i) {
             this.form.name = this.users[i].name;
             this.form.admin = this.users[i].admin;
@@ -61,7 +61,7 @@ export default {
             this.toUpdate = id;
             this.editModal.show();
         },
-        //Edits user
+        //Edits User and Saves edited data
         updateRow() {
             var usernameVal = /[a-zA-Z0-9]/;
             var passwordVal2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -93,14 +93,14 @@ export default {
             this.getUsers();
 
         },
-        //Deletes user
+        //Deletes User
         deleteUserHandler(id) {
             fetch(`${this.url}/deleteUser/${id}`, {
                 method: 'DELETE'
             })
             this.getUsers();
         },
-        //Searches users
+        //Searches Users
         searchUserHandler(searchParam) {
             let param = searchParam;
             fetch(`${this.url}/searchUser/${param}`, {
