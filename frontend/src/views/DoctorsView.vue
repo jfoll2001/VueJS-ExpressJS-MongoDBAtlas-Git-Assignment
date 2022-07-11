@@ -44,14 +44,14 @@ export default {
             this.doctors.forEach(doc => {
                 if (doc.lname == doctor.lname && doc.fname == doctor.fname || doc.phone == doctor.phone) {
                     alert('Doctor already in system');
-                } else {
-                    fetch(`${this.url}/saveDoctor`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(doctor)                        
-                    })
+                    doctor = null;
                 }
-            })
+                fetch(`${this.url}/saveDoctor`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(doctor)
+                })
+            });
         },
         //Opens doctor editor
         editDoctorHandler(id, i) {

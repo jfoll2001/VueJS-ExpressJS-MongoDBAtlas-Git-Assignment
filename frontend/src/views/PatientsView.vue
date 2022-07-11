@@ -47,6 +47,7 @@ export default {
             this.patients.forEach(p => {
                 if (p.fname == patient.fname && p.lname == patient.lname || p.phone == patient.phone) {
                     alert('Phone number or duplicate Patient');
+                    patient = null;
                     return;
                 } else {
                     fetch(`${this.url}/savePatient`, {
@@ -55,7 +56,7 @@ export default {
                         body: JSON.stringify(patient)
                     })
                 };
-            })
+            });
         },
         //Opens patient editor
         editPatientHandler(id, i) {
@@ -84,18 +85,15 @@ export default {
             }
             this.patients.forEach(p => {
                 if (p.fname == f.fname && p.lname == f.lname || p.phone == f.phone) {
-                    alert('Duplicate phone number, patient or no changes made');   
-                    return;                
-                } else {
-                    fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(this.form)
-                    })
-                };
-            })
-
-
+                    alert('Duplicate phone number, patient or no changes made');
+                    return;
+                }
+                fetch(`${this.url}/updatePatient/${this.toUpdate}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(this.form)
+                })
+            });
         },
         //Deletes Patient
         deletePatientHandler(id) {

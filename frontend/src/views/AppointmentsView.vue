@@ -30,7 +30,7 @@ export default {
         }
     },
     methods: {
-        //Gets all of the appointments
+        //Loads Appointments
         getAppionts() {
             fetch(`${this.url}/loadAppoints`, {
                 method: 'GET',
@@ -43,7 +43,7 @@ export default {
                 .then(response => response.json())
                 .then(data => this.appoints = data)
         },
-        //Gets patients and doctors for the form 
+        //Gets Patients and Doctors for the form 
         getDocPatient() {
             fetch(`${this.url}/loadDoctors`, {
                 method: 'GET',
@@ -69,11 +69,23 @@ export default {
         },
         //Saves appointment
         saveAppointHandler(appointment) {
-            fetch(`${this.url}/saveAppoint`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(appointment)
-            })
+            this.appoints.forEach(a => {
+                if (a.patient == appointment.patient && a.doctor == appointment.doctor && a.date == appointment.date && a.time == appointment.time) {
+                    alert('Appointment already exists');
+                    appointment = null;
+                    return;
+                } else if (a.date == appointment.date && a.time == appointment.time) {
+                    alert('Appointment already at that date and time');
+                    appointment = null;
+                    return;
+                } else {
+                    fetch(`${this.url}/saveAppoint`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(appointment)
+                    })
+                };
+            });
         },
         //Opens appointment editor
         editApointsHandler(id, i) {
@@ -88,11 +100,26 @@ export default {
         },
         //Edits appointment
         updateRow() {
-            fetch(`${this.url}/updateAppoint/${this.toUpdate}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.form)
-            })
+            var f = this.form;
+            if (!f.location || !f.doctor || !f.patient || !f.date || !f.time) {
+                alert("All fields need to be filled out");
+                return;
+            }
+            this.appoints.forEach(a => {
+                if (a.patient == f.patient && a.doctor == f.doctor && a.date == f.date && a.time == f.time) {
+                    alert('Appointment already exists');
+                    return;
+                } else if (a.date == f.date && a.time == f.time) {
+                    alert('Appointment already at that date and time');
+                    return;
+                } else {
+                    fetch(`${this.url}/updateAppoint/${this.toUpdate}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.form)
+                    })
+                };
+            });
             this.getAppionts();
         },
         //Deletes appointment

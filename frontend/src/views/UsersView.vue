@@ -44,14 +44,15 @@ export default {
             this.users.forEach(u => {
                 if (u.name == user.name) {
                     alert('Username taken');
-                } else {
-                    fetch(`${this.url}/saveUser`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(user)
-                    })
-                };
-            })
+                    user = null;
+                    return;
+                }
+                fetch(`${this.url}/saveUser`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(user)
+                })
+            });
         },
         //Opens user editor
         editUserHandler(id, i) {

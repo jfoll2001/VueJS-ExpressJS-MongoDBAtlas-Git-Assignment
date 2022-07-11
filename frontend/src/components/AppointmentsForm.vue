@@ -15,6 +15,11 @@ export default {
     props: ['patients', 'doctors'],
     methods: {
         saveAppoint() {
+            var a = this.appointment;
+            if (!a.location || !a.doctor || !a.patient || !a.date || !a.time) {
+                alert("All fields need to be filled out");
+                return;
+            }
             this.$emit('saveAppoint', this.appointment);
         }
     }

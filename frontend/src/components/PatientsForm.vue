@@ -59,7 +59,7 @@ export default {
                     <span class="input-group-text">Zip Code:</span>
                     <input v-model="patient.zipcode" type="text" class="form-control" placeholder="xxxxxx" required>
                 </div>
-                <button type="button" @click="savePatient" class="btn btn-primary w-25">Submit</button>
+                <button @click="savePatient" class="btn btn-primary w-25">Submit</button>
             </form>
             <hr>
         </div>
